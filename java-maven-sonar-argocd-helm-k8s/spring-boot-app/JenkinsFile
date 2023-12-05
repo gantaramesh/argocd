@@ -48,9 +48,10 @@ environment{
         environment {
             GIT_REPO_NAME = "argocd"
             GIT_USER_NAME = "gantaramesh"
+            DOCKER_REGISTRY_CREDENTIALS = 'git_creds'
         }
         steps {
-            withCredentials([string(credentialsId: 'git_creds', variable: 'GITHUB_TOKEN')]) {
+            withCredentials([string(credentialsId: ${DOCKER_REGISTRY_CREDENTIALS}, variable: 'GITHUB_TOKEN')]) {
                 sh '''
                     git config user.email "rameshganta888@gmail.com"
                     git config user.name "Ganta Ramesh"
