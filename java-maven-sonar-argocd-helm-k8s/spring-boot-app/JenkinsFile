@@ -22,22 +22,21 @@ pipeline {
         sh 'cd java-maven-sonar-argocd-helm-k8s/spring-boot-app && mvn clean package'
       }
     }
-    stage('Build and Push Docker Image') {
-      environment {
-        DOCKER_IMAGE = "abhishekf5/ultimate-cicd:${BUILD_NUMBER}"
-        // DOCKERFILE_LOCATION = "java-maven-sonar-argocd-helm-k8s/spring-boot-app/Dockerfile"
-        REGISTRY_CREDENTIALS = credentials('docker_creds')
-      }
-      steps {
-        script {
-            sh 'cd java-maven-sonar-argocd-helm-k8s/spring-boot-app && docker build -t ${DOCKER_IMAGE} .'
-            def dockerImage = docker.image("${DOCKER_IMAGE}")
-            docker.withRegistry('https://docker.io', "docker_creds") {
-            dockerImage.push()
+    stage('Image push to Docker Hub'){
+            steps{
+                script{
+                        withCredentials([usernamePassword(credentialsId: "${DOCKER_REGISTRY_CREDENTIALS}", passwordVariable: 'DOCKER_PASSWORD', usernameVariable: 'DOCKER_USERNAME')]) {
+                    
+                        sh """
+						            cd java-maven-sonar-argocd-helm-k8s/spring-boot-app && docker build -t argocdspringboot:${VERSION} .
+                        docker login -u ${DOCKER_USERNAME} -p ${DOCKER_PASSWORD}
+                        docker tag argocdspringboot:${VERSION}  rameshganta/argocdspringboot:${VERSION}
+                        docker push rameshganta/argocdspringboot:${VERSION}
+                        """                 
+                    }
+                }
             }
         }
-      }
-    }
     stage('Update Deployment File') {
         environment {
             GIT_REPO_NAME = "Jenkins-Zero-To-Hero"
