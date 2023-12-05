@@ -28,11 +28,11 @@ options {
     stage('Image push to Docker Hub'){
 environment{
         DOCKER_REGISTRY = 'docker.io'
-        DOCKER_REGISTRY_CREDENTIALS = 'docker_creds'
+        GITHUB = 'docker_creds'
     }
             steps{
                 script{
-                        withCredentials([usernamePassword(credentialsId: "${DOCKER_REGISTRY_CREDENTIALS}", passwordVariable: 'DOCKER_PASSWORD', usernameVariable: 'DOCKER_USERNAME')]) {
+                        withCredentials([usernamePassword(credentialsId: "${GITHUB}", passwordVariable: 'DOCKER_PASSWORD', usernameVariable: 'DOCKER_USERNAME')]) {
                     
                         sh """
 						            cd java-maven-sonar-argocd-helm-k8s/spring-boot-app && docker build -t argocdspringboot:${VERSION} .
