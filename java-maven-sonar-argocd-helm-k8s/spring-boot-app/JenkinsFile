@@ -2,6 +2,9 @@ pipeline {
   parameters{
         string(name: 'VERSION', description: 'Enter the APP VERSION')
     }
+options {
+        buildDiscarder logRotator(artifactDaysToKeepStr: '', artifactNumToKeepStr: '', daysToKeepStr: '5', numToKeepStr: '2')
+    }
   agent {
     docker {
       image 'abhishekf5/maven-abhishek-docker-agent:v1'
