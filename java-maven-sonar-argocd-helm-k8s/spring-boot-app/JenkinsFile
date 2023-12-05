@@ -23,6 +23,10 @@ pipeline {
       }
     }
     stage('Image push to Docker Hub'){
+environment{
+        DOCKER_REGISTRY = 'docker.io'
+        DOCKER_REGISTRY_CREDENTIALS = 'docker_creds'
+    }
             steps{
                 script{
                         withCredentials([usernamePassword(credentialsId: "${DOCKER_REGISTRY_CREDENTIALS}", passwordVariable: 'DOCKER_PASSWORD', usernameVariable: 'DOCKER_USERNAME')]) {
