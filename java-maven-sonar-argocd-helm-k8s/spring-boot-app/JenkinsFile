@@ -50,7 +50,7 @@ options {
 	 }
 	  stage('Update Deployment File') {
         environment {
-            GIT_REPO_NAME = "Jenkins-Zero-To-Hero"
+            GIT_REPO_NAME = "argocd"
             GIT_USER_NAME = "gantaramesh"
         }
 	  steps {
